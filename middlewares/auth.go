@@ -14,7 +14,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен отсутствует"})
+			c.JSON(http.StatusUnauthorized, gin.H{"description": "Неавторизован."})
 			c.Abort()
 			return
 		}
@@ -22,7 +22,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		// Токен передается в формате "Bearer <token>"
 		tokenString := strings.Split(authHeader, " ")
 		if len(tokenString) != 2 {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат токена"})
+			c.JSON(http.StatusUnauthorized, gin.H{"description": "Неавторизован."})
 			c.Abort()
 			return
 		}
@@ -31,7 +31,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return utils.JwtSecret, nil
 		})
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Недействительный токен"})
+			c.JSON(http.StatusUnauthorized, gin.H{"description": "Неавторизован."})
 			c.Abort()
 			return
 		}
@@ -39,14 +39,14 @@ func AuthMiddleware() gin.HandlerFunc {
 		// Получаем имя пользователя из токена
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Ошибка обработки токена"})
+			c.JSON(http.StatusUnauthorized, gin.H{"description": "Неавторизован."})
 			c.Abort()
 			return
 		}
 
 		username, ok := claims["username"].(string)
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Ошибка извлечения пользователя"})
+			c.JSON(http.StatusUnauthorized, gin.H{"description": "Неавторизован."})
 			c.Abort()
 			return
 		}
