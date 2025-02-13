@@ -31,7 +31,7 @@ func main() {
 	{
 		auth.GET("/info", handlers.GetUserInfo)
 		auth.POST("/sendCoin", handlers.SendCoin)
-		auth.GET("/buy/:item", handlers.BuyItem)
+		auth.POST("/buy/:item", handlers.BuyItem)
 	}
 
 	r.Run(":8080")

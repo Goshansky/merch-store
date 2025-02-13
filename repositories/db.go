@@ -37,7 +37,7 @@ func runMigrations() {
 		id SERIAL PRIMARY KEY,
 		from_user TEXT REFERENCES users(name) ON DELETE CASCADE,
 		to_user TEXT REFERENCES users(name) ON DELETE CASCADE,
-		amount INT NOT NULL CHECK (amount > 0),
+		amount INT NOT NULL CHECK (amount > 0)
 	);
 
 	CREATE TABLE IF NOT EXISTS inventory (
