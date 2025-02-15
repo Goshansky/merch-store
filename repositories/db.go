@@ -23,6 +23,19 @@ func InitDB() {
 	runMigrations()
 }
 
+func InitTestDB() {
+	var err error
+	DB, err = sqlx.Connect("postgres", "host=localhost port=5430 user=postgres password=password dbname=test sslmode=disable")
+	if err != nil {
+		log.Fatal("Не удалось подключиться к базе данных:", err)
+	}
+
+	log.Println("Успешное подключение к базе данных!")
+
+	// Выполняем дополнительные миграции, если необходимо
+	runMigrations()
+}
+
 // runMigrations проверяет и создает структуру БД, если она не существует
 func runMigrations() {
 	schema := `

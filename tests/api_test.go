@@ -17,7 +17,7 @@ import (
 // Тестирую регистрацию
 func TestRegister(t *testing.T) {
 	// Инициализируем базу данных
-	repositories.InitDB()
+	repositories.InitTestDB()
 	// Очищаем тестовую таблицу пользователей
 	repositories.DB.Exec("DELETE FROM users")
 
@@ -36,7 +36,7 @@ func TestRegister(t *testing.T) {
 // Тестирую авторизацию
 func TestAuth(t *testing.T) {
 	// Инициализируем базу данных
-	repositories.InitDB()
+	repositories.InitTestDB()
 	// Очищаем тестовую таблицу пользователей
 	repositories.DB.Exec("DELETE FROM users")
 
@@ -55,7 +55,7 @@ func TestAuth(t *testing.T) {
 // Тестирую покупку мерча
 func TestBuyItem(t *testing.T) {
 	// Инициализируем базу данных
-	repositories.InitDB()
+	repositories.InitTestDB()
 	// Очищаем тестовую таблицу пользователей и инвентаря
 	repositories.DB.Exec("DELETE FROM users")
 	repositories.DB.Exec("DELETE FROM inventory")
@@ -104,7 +104,7 @@ func TestBuyItem(t *testing.T) {
 // Тестирую перевод монет
 func TestSendCoin(t *testing.T) {
 	// Инициализируем базу данных
-	repositories.InitDB()
+	repositories.InitTestDB()
 	// Очищаем тестовую таблицу пользователей и транзакций
 	repositories.DB.Exec("DELETE FROM users")
 	repositories.DB.Exec("DELETE FROM transactions")
@@ -166,7 +166,7 @@ func TestSendCoin(t *testing.T) {
 // Тестирую информацию о пользователе
 func TestGetUserInfo(t *testing.T) {
 	// Инициализируем базу данных
-	repositories.InitDB()
+	repositories.InitTestDB()
 	// Очищаем тестовую таблицу пользователей и инвентаря
 	repositories.DB.Exec("DELETE FROM users")
 	repositories.DB.Exec("DELETE FROM inventory")
@@ -207,6 +207,10 @@ func TestGetUserInfo(t *testing.T) {
 	assert.Empty(t, response["schema"].(map[string]interface{})["inventory"])
 	assert.Empty(t, response["schema"].(map[string]interface{})["coinHistory"].(map[string]interface{})["received"])
 	assert.Empty(t, response["schema"].(map[string]interface{})["coinHistory"].(map[string]interface{})["sent"])
+
+	repositories.DB.Exec("DELETE FROM users")
+	repositories.DB.Exec("DELETE FROM inventory")
+	repositories.DB.Exec("DELETE FROM transactions")
 }
 
 // Вспомогательная функция для регистрации
