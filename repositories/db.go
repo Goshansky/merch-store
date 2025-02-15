@@ -1,7 +1,9 @@
 package repositories
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -12,7 +14,13 @@ var DB *sqlx.DB
 // InitDB инициализирует соединение с базой данных
 func InitDB() {
 	var err error
-	DB, err = sqlx.Connect("postgres", "host=localhost port=5431 user=postgres password=password dbname=shop sslmode=disable")
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+	connectionString := fmt.Sprintf("host=%s port=5431 user=postgres password=password dbname=shop sslmode=disable", host)
+
+	DB, err = sqlx.Connect("postgres", connectionString)
 	if err != nil {
 		log.Fatal("Не удалось подключиться к базе данных:", err)
 	}
